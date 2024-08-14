@@ -5,7 +5,7 @@ ulimit -n 4096
 export PYTHONPATH=`pwd`
 
 # example_stats_dir=/nfs-nvme/home/share/tanghaojin/SPEC06_EmuTasks_topdown_0430_2023
-example_stats_dir=/nfs-nvme/home/share/zyy/gem5-results/mutipref-replay-merge-tlb-pref
+example_stats_dir=/nfs/home/liuziang/Workspace/XiangShan-dev/spec-result-gcc12
 
 mkdir -p results
 

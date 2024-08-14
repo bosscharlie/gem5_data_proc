@@ -62,10 +62,14 @@ xs_coarse_rename_map = {
     'MemNotReadyStall': 'MergeLoad',
 
     'LoadTLBStall': 'MergeLoad',
-    'LoadL1Stall': 'MergeLoad',
-    'LoadL2Stall': 'MergeLoad',
-    'LoadL3Stall': 'MergeLoad',
-    'LoadMemStall': 'MergeLoad',
+    # 'LoadL1Stall': 'MergeLoad',
+    # 'LoadL2Stall': 'MergeLoad',
+    # 'LoadL3Stall': 'MergeLoad',
+    # 'LoadMemStall': 'MergeLoad',
+    'LoadL1Stall': 'LoadL1',
+    'LoadL2Stall': 'LoadL2',
+    'LoadL3Stall': 'LoadL3',
+    'LoadMemStall': 'LoadMem',
     'StoreStall': 'MergeStore',
 
     'AtomicStall': 'MergeMisc',
@@ -83,7 +87,7 @@ xs_coarse_rename_map = {
     'NoStall': 'MergeBase',
 
     'MemVioRedirectBubble': 'MergeBadSpec',
-    'OtherRedirectBubble': 'MergeMisc',
+    'OtherRedirectBubble': 'MergeMisc'
 
 }
 

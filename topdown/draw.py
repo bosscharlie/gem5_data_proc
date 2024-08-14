@@ -5,16 +5,16 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import os
 import os.path as osp
-from .topdown_stat_map import *
+from topdown_stat_map import *
 # from svglib.svglib import svg2rlg
 # from reportlab.graphics import renderPDF
 
 def draw():
     results = {
-        "GEM5-0429":
-            ("results/gem5-topdown-example-weighted.csv", "GEM5"),
-        "XS-0429": 
-            ("results/xs-topdown-example-weighted.csv", "XS"),
+        "XS-MASTER":
+            ("base-results/xs-base-weighted.csv", "XS"),
+        "XS-DEV": 
+            ("dev-results/xs-dev-weighted.csv", "XS"),
     }
 
     configs = list(results.keys())
@@ -73,6 +73,7 @@ def draw():
         # Merge df columns according to the rename map if value starting with 'Merge'
         if rename:
             print(f'Renaming columns of {results[sim_conf][1]} stats')
+            cpi = df['cpi']
             if fine_grain_rename:
                 if results[sim_conf][1] == 'GEM5':
                     rename_with_map(df, gem5_fine_grain_rename_map)
@@ -85,7 +86,7 @@ def draw():
                 else:
                     assert results[sim_conf][1] == 'XS'
                     rename_with_map(df, xs_coarse_rename_map)
-        
+
                 icount = 20*10**6
                 print(results[sim_conf][1], f'Base count:\n{df["Base"]}')
                 if 'BadSpecInst' in df.columns:
@@ -98,7 +99,7 @@ def draw():
                 # df['BadSpec'] = df['BadSpecInst'] + df['BadSpec']
                 # df.drop(columns=['BadSpecInst'], inplace=True)
 
-
+            df['cpi'] = cpi
         df = df.astype(float)
         print(df.columns)
         renamed_dfs.append(df)
@@ -126,7 +127,8 @@ def draw():
 
     tmp_df = renamed_dfs[0].sort_values(by = 'cpi', ascending=False)
     bmk_sort = tmp_df.index.tolist()
-    # bmk_sort = bmk_sort[len(bmk_sort)//2:]
+    # bmk_sort = [bmk_sort[17]]
+    bmk_sort = bmk_sort[1:]
     # bmk_sort = bmk_sort[:len(bmk_sort)//2]
 
     for sim_conf, df in zip(results, renamed_dfs):
@@ -189,8 +191,8 @@ def draw():
             else:
                 label = component
             # print('Bottom of astar:', bottom[df.index == 'astar'])
-            # if component in ['Base', 'BadSpecInst', 'BadSpec']:
-            if True:
+            if component in ['LoadL1', 'LoadL2', 'LoadL3', 'LoadMem''Store', 'Core']:
+            # if True:
                 p = ax.bar(x, df[component], bottom=bottom,
                         width=width, color=color, label=label, edgecolor='black', hatch=hatch)
                 highest = max(highest, max(bottom + df[component]))
@@ -224,7 +226,8 @@ def draw():
 
     tag = 'compare-topdown'
     # tag = 'int-raw-topdown'
-    fig.savefig(osp.join('results', f'{tag}.png'), bbox_inches='tight', pad_inches=0.05, dpi=200)
+    # fig.savefig(osp.join('results', f'{tag}.png'), bbox_inches='tight', pad_inches=0.05, dpi=200)
+    fig.savefig(f'{tag}.png', bbox_inches='tight', pad_inches=0.05, dpi=200)
     # fig.savefig(osp.join('results', f'{tag}.svg'), bbox_inches='tight', pad_inches=0.05)
     # fig.savefig(osp.join('results', f'{tag}.pdf'), bbox_inches='tight', pad_inches=0.05)
 
