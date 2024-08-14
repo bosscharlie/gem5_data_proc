@@ -25,7 +25,10 @@ spec_bmks = {
                 ],
             'high_squash': ['astar', 'bzip2', 'gobmk', 'sjeng'],
             },
-        '17': {},
+        '17': {
+            'int':  ['deepsjeng', 'exchange2', 'gcc', 'leela', 'mcf', 'omnetpp', 'perlbench', 'x264', 'xalancbmk', 'xz'],
+            'float': [ 'bwaves', 'cactusBSSN', 'namd', 'parest', 'povray', 'lbm', 'wrf', 'blender', 'cam4', 'imagick', 'nab', 'fotonik3d', 'roms'],
+            },
         }
 
 def get_insts(fname: str):

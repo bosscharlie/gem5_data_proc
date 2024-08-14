@@ -40,6 +40,9 @@ def workload_point_frompath(path):
         workload = path.split('/')[0]
         point = second_layer
         level = 2
+    elif len(split_path) >= 4 and not split_path[2].isdigit() and split_path[3].isdigit():#work_lo_ad_point_xxx/
+        workload = split_path[0] + '_' + split_path[1] + '_' + split_path[2]
+        point = split_path[3]
     elif len(split_path) >= 3 and split_path[2].isdigit():#work_load_point_xxx/
         workload = split_path[0] + '_' + split_path[1]
         point = split_path[2]

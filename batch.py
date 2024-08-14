@@ -227,6 +227,8 @@ def main():
                     c.add_mem_bw(d)
                 if 'pf_targets' in opt.eval_stat:
                     eval(f'c.{prefix}add_pf_accuracy(d)')
+                if 'rvv_targets' in opt.eval_stat:
+                    c.rvv_post_process(d)
 
             # add bmk and point after topdown processing
             segments = workload.split('_')

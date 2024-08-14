@@ -660,6 +660,20 @@ def add_warmup_mpki(d: dict) -> None:
         mispred = 0.0
     d['total branch MPKI'] = mispred / float(d['Insts']) * 1000
 
+
+def rvv_post_process(d: dict) -> None:
+    print(d)
+    d['unitStrideLoad'] = d['UnitStrideLoad'] + d['UnitStrideMaskLoad'] + d['WholeRegisterLoad']
+    d['unitStrideStore'] = d['UnitStrideStore'] + d['WholeRegisterStore']
+    d['otherComplexLoad'] = d['StridedLoad'] + d['IndexedLoad'] + d['UnitStrideFaultOnlyFirstLoad']
+    keep_keys = ['unitStrideLoad', 'unitStrideStore',
+                 'otherComplexLoad', 'SegUnitStrideLoad', 'SegUnitStrideMaskLoad',
+                 'SegStridedLoad', 'SegIndexedLoad', 'segUnitStrideNF=4', 'segUnitStrideNF=6', ]
+
+    for k in list(d.keys()):
+        if k in t.rvv_targets and k not in keep_keys:
+            d.pop(k, None)
+
 def get_spec2017_int():
     with open(os.path.expanduser(env.data('int.txt'))) as f:
         return [x for x in f.read().split('\n') if len(x) > 1]

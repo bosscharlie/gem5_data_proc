@@ -14,7 +14,6 @@ import os
 import warnings
 
 args = []
-spec_v = '06'
 clock_rate = 3 * 10**9
 reftime_js = {}
 
@@ -111,6 +110,7 @@ def proc_bmk(bmk_df: pd.DataFrame, js: dict, bmk: str):
 
 
 def compute_weighted_metrics(csv_path: str, js_path: str, out_csv: str, args):
+    spec_v = args.spec_version
     df = pd.read_csv(csv_path, index_col=0)
     bmks = df['bmk'].unique()
     with open(js_path, 'r') as f:
@@ -122,10 +122,10 @@ def compute_weighted_metrics(csv_path: str, js_path: str, out_csv: str, args):
         pure_name = bmk
         if m:
             pure_name = m.group('name')
-        if pure_name not in u.spec_bmks['06']['int'] and args.int_only:
+        if pure_name not in u.spec_bmks[spec_v]['int'] and args.int_only:
             print(f'{bmk} not in int list')
             continue
-        if pure_name not in u.spec_bmks['06']['float'] and args.fp_only:
+        if pure_name not in u.spec_bmks[spec_v]['float'] and args.fp_only:
             print(f'{bmk} not in fp list')
             continue
         df_bmk = df[df['bmk'] == bmk]
