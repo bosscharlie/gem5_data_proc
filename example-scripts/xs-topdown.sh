@@ -20,14 +20,11 @@ else
     stats_dir=$base_stats_dir
 fi
 
-rm -r $prefix-results
-mkdir -p $prefix-results
+tag="$prefix"
 
-tag="xs-$prefix"
-
-python3 batch.py -s $stats_dir -t -o $prefix-results/$tag.csv -X --topdown-raw
+python3 batch.py -s $stats_dir -t -o results/$tag.csv -X --topdown-raw
 
 python3 simpoint_cpt/compute_weighted.py \
-    -r $prefix-results/$tag.csv \
+    -r results/$tag.csv \
     -j $cover3_path_2 \
-    -o $prefix-results/$tag-weighted.csv
+    -o results/$tag-weighted.csv

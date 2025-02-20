@@ -184,8 +184,8 @@ xs_fine_grain_rename_map = {
     'FetchFragBubble': 'FragmentBubble',
 
     'DivStall': 'MergeLongExecute',
-    'ScalarLongExecute': 'MergeLongExecute',
-    'VectorLongExecute': 'MergeLongExecute',
+    # 'ScalarLongExecute': 'MergeLongExecute',
+    # 'VectorLongExecute': 'MergeLongExecute',
     'IntNotReadyStall': 'MergeInstNotReady',
     'FPNotReadyStall': 'MergeInstNotReady',
 
@@ -273,31 +273,31 @@ def mergeBadSpecInst(df):
     df['BadSpecInst'] = df['NoStall'] - icount
     df['NoStall'] = icount
 
-def rename_with_map(df: pd.DataFrame, hierarchy, level):
-    mergeBadSpecInst(df)
-    if level == 3:
-        # 当 level=3 时，我们不进行任何重命名或合并
-        return
-    rename_map = create_rename_map(hierarchy, level)
-    to_drops = []
-    columns_to_keep = ['cpi', 'point', 'bmk', 'workload']
+# def rename_with_map(df: pd.DataFrame, hierarchy, level):
+#     mergeBadSpecInst(df)
+#     if level == 3:
+#         # 当 level=3 时，我们不进行任何重命名或合并
+#         return
+#     rename_map = create_rename_map(hierarchy, level)
+#     to_drops = []
+#     columns_to_keep = ['cpi', 'point', 'bmk', 'workload']
 
-    for col in df.columns:
-        if col not in rename_map and col not in columns_to_keep:
-            to_drops.append(col)
+#     for col in df.columns:
+#         if col not in rename_map and col not in columns_to_keep:
+#             to_drops.append(col)
     
-    for k, v in rename_map.items():
-        if v is not None:
-            if v.startswith('Merge'):
-                merged = v[5:]
-                if merged not in df.columns:
-                    df[merged] = df[k]
-                else:
-                    df[merged] += df[k]
-            else:
-                df[v] = df[k]
-            if k not in columns_to_keep:
-                to_drops.append(k)
+#     for k, v in rename_map.items():
+#         if v is not None:
+#             if v.startswith('Merge'):
+#                 merged = v[5:]
+#                 if merged not in df.columns:
+#                     df[merged] = df[k]
+#                 else:
+#                     df[merged] += df[k]
+#             else:
+#                 df[v] = df[k]
+#             if k not in columns_to_keep:
+#                 to_drops.append(k)
     
-    print(f'Dropping {to_drops}')
-    df.drop(columns=to_drops, inplace=True)
+#     print(f'Dropping {to_drops}')
+#     df.drop(columns=to_drops, inplace=True)

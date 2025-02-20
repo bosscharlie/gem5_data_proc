@@ -1,3 +1,5 @@
+import sys
+sys.path.append('.')
 import pandas as pd
 import numpy as np
 import utils as u
@@ -11,10 +13,10 @@ from topdown_stat_map import *
 
 def draw():
     results = {
-        "GEM5-ref":
-            ("results/spec_all_8width-weighted.csv", "GEM5"),
-        "GEM5-ideal":
-            ("results/spec_all_frontend_ideal-weighted.csv", "GEM5"),
+        "XS-base":
+            ("results/base-weighted.csv", "XS"),
+        "XS-new-hint":
+            ("results/dev-weighted.csv", "XS"),
     }
 
     configs = list(results.keys())
@@ -67,7 +69,7 @@ def draw():
     dfs = [df.loc[common_bmk] for df in dfs]
 
     rename = True
-    fine_grain_rename = False
+    fine_grain_rename = True
     renamed_dfs = []
     for sim_conf, df in zip(results, dfs):
         # Merge df columns according to the rename map if value starting with 'Merge'
@@ -78,7 +80,7 @@ def draw():
                     rename_with_map(df, gem5_fine_grain_rename_map)
                 else:
                     assert results[sim_conf][1] == 'XS'
-                    rename_with_map(df, xs_fine_grain_rename_map)
+                    rename_with_map(df, xs_mem_finegrain_rename_map)
             else:
                 if results[sim_conf][1] == 'GEM5':
                     rename_with_map(df, gem5_coarse_rename_map)
@@ -166,7 +168,7 @@ def draw():
         # df = df.div(df.sum(axis=1), axis=0)
 
         # print('CPI stack sum', df.sum(axis=1))
-        for to_drop in ['ipc', 'cpi', 'Cycles', 'Insts', 'coverage']:
+        for to_drop in ['ipc', 'cpi', 'Cycles', 'Insts', 'coverage', 'Base']:
             if to_drop in df.columns:
                 df = df.drop(columns=[to_drop])
 
@@ -189,8 +191,8 @@ def draw():
             else:
                 label = component
             # print('Bottom of astar:', bottom[df.index == 'astar'])
-            # if component in ['Base', 'BadSpecInst', 'BadSpec']:
-            if True:
+            if component in ['BadSpecInst', 'BadSpec', 'LoadL1Bound', 'LoadL1Bound', 'LoadL1Bound', 'StoreBound']:
+            # if True:
                 p = ax.bar(x, df[component], bottom=bottom,
                         width=width, color=color, label=label, edgecolor='black', hatch=hatch)
                 highest = max(highest, max(bottom + df[component]))
